@@ -1,0 +1,50 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model visitante {
+  id           Int      @id @default(autoincrement())
+  nome         String
+  documento    String   @unique
+  telefone     String?
+  movimentacao movimentacao[]
+}
+
+model condominio {
+  id       Int      @id @default(autoincrement())
+  nome     String
+  endereco String
+  unidade  unidade[]
+}
+
+model unidade {
+  id           Int      @id @default(autoincrement())
+  numero       String
+  condominioId Int
+  movimentacao movimentacao[]
+  condominio   condominio @relation(fields: [condominioId], references: [id])
+
+  @@index([condominioId])
+}
+
+model movimentacao {
+  id          Int      @id @default(autoincrement())
+  visitanteId Int
+  unidadeId   Int
+  entrada     DateTime @default(now())
+  saida       DateTime?
+  unidade     unidade  @relation(fields: [unidadeId], references: [id])
+  visitante   visitante @relation(fields: [visitanteId], references: [id])
+
+  @@index([unidadeId])
+  @@index([visitanteId])
+}
+
+
+
