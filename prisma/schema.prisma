@@ -12,14 +12,14 @@ model visitante {
   id           Int      @id @default(autoincrement())
   nomeVisitante         String
   documentoVisitante    String   @unique
-  telefoneVisitante     String?
+  telefoneVisitante     String?  @unique
   movimentacao movimentacao[] 
 }
 
 model condominio {
   id       Int      @id @default(autoincrement())
   nomeCondominio     String
-  enderecoCondominio String
+  enderecoCondominio String    @unique
   unidade  unidade[]
 }
 
