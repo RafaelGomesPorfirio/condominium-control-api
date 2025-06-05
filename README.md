@@ -16,9 +16,6 @@ API RESTful para gerenciamento de visitantes, unidades e condomínios com regist
 - [Execução](#-execução)
 - [Testes](#-testes)
 - [Documentação API](#-documentação-api)
-- [Estrutura do Projeto](#-estrutura-do-projeto)
-- [Rotas](#-rotas)
-- [Licença](#-licença)
 
 ## 🚀 Recursos
 
