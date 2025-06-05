@@ -15,7 +15,7 @@ export function validate(schema: ZodSchema<any>) {
       return;
     }
 
-    req.body = result.data; // Dados validados e sanitizados
+    req.body = result.data; 
     next();
   };
 }

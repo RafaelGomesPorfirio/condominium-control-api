@@ -2,21 +2,25 @@ import * as condominioRepository from '../repositories/condominio.repository';
 import { CondominioCreateInput, CondominioUpdateInput } from '../types/condominio.type';
 
 export const findAllCondominios = async () => {
-  return await condominioRepository.getAllCondominios();
+  return condominioRepository.findAllCondominios();
+};
+
+export const findAllCondominiosWithUnidades = async () => {
+  return condominioRepository.findAllCondominiosWithUnidades();
 };
 
 export const findCondominioById = async (id: number) => {
-  return await condominioRepository.getCondominioById(id);
+  return condominioRepository.findCondominioById(id);
 };
 
 export const createCondominio = async (data: CondominioCreateInput) => {
-  return await condominioRepository.createCondominio(data);
+  return condominioRepository.createCondominio(data);
 };
 
 export const updateCondominio = async (id: number, data: CondominioUpdateInput) => {
-  return await condominioRepository.updateCondominio(id, data);
+  return condominioRepository.updateCondominio(id, data);
 };
 
 export const deleteCondominio = async (id: number) => {
-  return await condominioRepository.deleteCondominio(id);
+  return condominioRepository.deleteCondominio(id);
 };

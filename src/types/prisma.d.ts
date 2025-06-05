@@ -22,7 +22,6 @@ declare module '@prisma/client' {
 
   export interface CondominioUpdateInput extends Partial<CondominioCreateInput> {}
 
-  // Exportando os tipos de erro do Prisma
   export import PrismaClientKnownRequestError = Prisma.PrismaClientKnownRequestError;
   export import PrismaClientUnknownRequestError = Prisma.PrismaClientUnknownRequestError;
   export import PrismaClientValidationError = Prisma.PrismaClientValidationError;

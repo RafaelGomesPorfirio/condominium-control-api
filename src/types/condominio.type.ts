@@ -1,9 +1,21 @@
-export interface CondominioCreateInput {
-  nome: string;
-  endereco: string;
+export interface Condominio {
+  id: number;
+  nomeCondominio: string;
+  enderecoCondominio: string;
+  unidade?: Unidade[];
 }
 
-export interface CondominioUpdateInput {
-  nome?: string;
-  endereco?: string;
+export interface CondominioCreateInput {
+  nomeCondominio: string;
+  enderecoCondominio: string;
+}
+
+export interface CondominioUpdateInput extends Partial<CondominioCreateInput> {}
+
+interface Unidade {
+  id: number;
+  numeroUnidade: string;
+  blocoUnidade?: string | null;
+  andarUnidade?: number | null;
+  tipoUnidade?: string | null;
 }

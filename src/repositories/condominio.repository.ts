@@ -1,34 +1,40 @@
-import { PrismaClient } from '../generated/prisma';
+import { prisma } from '../services/prisma';
 import { CondominioCreateInput, CondominioUpdateInput } from '../types/condominio.type';
 
-const prisma = new PrismaClient();
+export const findAllCondominios = async () => {
+  return prisma.condominio.findMany();
+};
 
-export const getAllCondominios = async () => {
-  return await prisma.condominio.findMany({
-    include: { unidade: true },  // inclui as unidades relacionadas
+export const findAllCondominiosWithUnidades = async () => {
+  return prisma.condominio.findMany({
+    include: {
+      unidade: true,
+    },
   });
 };
 
-export const getCondominioById = async (id: number) => {
-  return await prisma.condominio.findUnique({
+export const findCondominioById = async (id: number) => {
+  return prisma.condominio.findUnique({
     where: { id },
-    include: { unidade: true },
+    include: {
+      unidade: true,
+    },
   });
 };
 
 export const createCondominio = async (data: CondominioCreateInput) => {
-  return await prisma.condominio.create({ data });
+  return prisma.condominio.create({ data });
 };
 
 export const updateCondominio = async (id: number, data: CondominioUpdateInput) => {
-  return await prisma.condominio.update({
+  return prisma.condominio.update({
     where: { id },
     data,
   });
 };
 
 export const deleteCondominio = async (id: number) => {
-  return await prisma.condominio.delete({
+  return prisma.condominio.delete({
     where: { id },
   });
 };

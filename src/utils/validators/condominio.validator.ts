@@ -1,12 +1,12 @@
-// src/utils/validators/condominio.validator.ts
 import { z } from 'zod';
 
 export const createCondominioSchema = z.object({
-  nome: z.string({
-    required_error: 'Nome é obrigatório',
-  }).min(3, 'Nome deve ter no mínimo 3 caracteres'),
-
-  endereco: z.string({
-    required_error: 'Endereço é obrigatório',
-  }).min(5, 'Endereço deve ter no mínimo 5 caracteres'),
+  nomeCondominio: z.string()
+    .min(3, 'Nome deve ter pelo menos 3 caracteres')
+    .max(100, 'Nome não pode exceder 100 caracteres'),
+  enderecoCondominio: z.string()
+    .min(5, 'Endereço deve ter pelo menos 5 caracteres')
+    .max(200, 'Endereço não pode exceder 200 caracteres'),
 });
+
+export const updateCondominioSchema = createCondominioSchema.partial();

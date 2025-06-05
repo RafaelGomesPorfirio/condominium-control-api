@@ -1,108 +1,75 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response } from 'express';
 import * as condominioService from '../services/condominio.service';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { createCondominioSchema, updateCondominioSchema } from '../utils/validators/condominio.validator';
+import { validate } from '../middlewares/validate';
 
-export const getAllCondominios = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const getAllCondominios = async (req: Request, res: Response) => {
   try {
     const condominios = await condominioService.findAllCondominios();
     res.json(condominios);
-  } catch (error) {
-    res.status(500).json({ error: 'Erro ao buscar condomínios' });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
   }
 };
 
-export const getCondominioById = async (req: Request, res: Response): Promise<void> => {
-  const { id } = req.params;
+export const getAllCondominiosWithUnidades = async (req: Request, res: Response) => {
   try {
-    const condominio = await condominioService.findCondominioById(Number(id));
+    const condominios = await condominioService.findAllCondominiosWithUnidades();
+    res.json(condominios);
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const getCondominioById = async (req: Request, res: Response) => {
+  try {
+    const id = parseInt(req.params.id);
+    const condominio = await condominioService.findCondominioById(id);
     if (!condominio) {
       res.status(404).json({ error: 'Condomínio não encontrado' });
       return;
     }
     res.json(condominio);
-  } catch (error) {
-    res.status(500).json({ error: 'Erro ao buscar condomínio' });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
   }
 };
 
-export const getUnidadesByCondominio = async (req: Request, res: Response): Promise<void> => {
-  const { id } = req.params;
-  try {
-    const condominio = await condominioService.findCondominioById(Number(id));
-    if (!condominio) {
-      res.status(404).json({ error: 'Condomínio não encontrado' });
-      return;
+export const createCondominio = [
+  validate(createCondominioSchema),
+  async (req: Request, res: Response) => {
+    try {
+      const condominio = await condominioService.createCondominio(req.body);
+      res.status(201).json(condominio);
+    } catch (error: any) {
+      res.status(400).json({ error: error.message });
     }
-    res.json(condominio.unidade);  // retorna só as unidades do condomínio
-  } catch (error) {
-    res.status(500).json({ error: 'Erro ao buscar unidades' });
   }
-};
+];
 
-export const createCondominio = async (req: Request, res: Response): Promise<void> => {
-  const { nome, endereco } = req.body;
-  try {
-    const newCondominio = await condominioService.createCondominio({ nome, endereco });
-    res.status(201).json(newCondominio);
-  } catch (error) {
-    if (error instanceof PrismaClientKnownRequestError) {
-      if (error.code === 'P2002') {
-        res.status(400).json({ error: 'Condomínio com este nome ou endereço já existe' });
+export const updateCondominio = [
+  validate(updateCondominioSchema),
+  async (req: Request, res: Response) => {
+    try {
+      const id = parseInt(req.params.id);
+      const condominio = await condominioService.updateCondominio(id, req.body);
+      if (!condominio) {
+        res.status(404).json({ error: 'Condomínio não encontrado' });
         return;
       }
+      res.json(condominio);
+    } catch (error: any) {
+      res.status(400).json({ error: error.message });
     }
-    res.status(500).json({
-      error: 'Erro ao criar condomínio',
-      details: error instanceof Error ? error.message : String(error)
-    });
   }
-};
+];
 
-export const updateCondominio = async (req: Request, res: Response): Promise<void> => {
-  const { id } = req.params;
-  const { nome, endereco } = req.body;
+export const deleteCondominio = async (req: Request, res: Response) => {
   try {
-    const updatedCondominio = await condominioService.updateCondominio(Number(id), { nome, endereco });
-    if (!updatedCondominio) {
-      res.status(404).json({ error: 'Condomínio não encontrado' });
-      return;
-    }
-    res.json(updatedCondominio);
-  } catch (error) {
-    if (error instanceof PrismaClientKnownRequestError) {
-      if (error.code === 'P2002') {
-        res.status(400).json({ error: 'Condomínio com este nome ou endereço já existe' });
-        return;
-      }
-    }
-    res.status(500).json({
-      error: 'Erro ao atualizar condomínio',
-      details: error instanceof Error ? error.message : String(error)
-    });
-  }
-};
-
-export const deleteCondominio = async (req: Request, res: Response): Promise<void> => {
-  const { id } = req.params;
-  try {
-    const deletedCondominio = await condominioService.deleteCondominio(Number(id));
-    if (!deletedCondominio) {
-      res.status(404).json({ error: 'Condomínio não encontrado' });
-      return;
-    }
-    res.json({ message: 'Condomínio deletado com sucesso' });
-  } catch (error) {
-    if (error instanceof PrismaClientKnownRequestError) {
-      if (error.code === 'P2003') {
-        res.status(400).json({
-          error: 'Não é possível deletar condomínio com unidades vinculadas'
-        });
-        return;
-      }
-    }
-    res.status(500).json({
-      error: 'Erro ao deletar condomínio',
-      details: error instanceof Error ? error.message : String(error)
-    });
+    const id = parseInt(req.params.id);
+    await condominioService.deleteCondominio(id);
+    res.json({ message: 'Condomínio removido com sucesso' });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
   }
 };

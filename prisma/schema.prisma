@@ -10,25 +10,28 @@ datasource db {
 
 model visitante {
   id           Int      @id @default(autoincrement())
-  nome         String
-  documento    String   @unique
-  telefone     String?
-  movimentacao movimentacao[]
+  nomeVisitante         String
+  documentoVisitante    String   @unique
+  telefoneVisitante     String?
+  movimentacao movimentacao[] 
 }
 
 model condominio {
   id       Int      @id @default(autoincrement())
-  nome     String
-  endereco String
+  nomeCondominio     String
+  enderecoCondominio String
   unidade  unidade[]
 }
 
 model unidade {
   id           Int      @id @default(autoincrement())
-  numero       String
-  condominioId Int
+  numeroUnidade       String
+  blocoUnidade        String?
+  andarUnidade        Int?
+  tipoUnidade  String? 
+  condominioId   Int
   movimentacao movimentacao[]
-  condominio   condominio @relation(fields: [condominioId], references: [id])
+  condominio   condominio @relation(fields: [condominioId], references: [id], onDelete: Cascade)
 
   @@index([condominioId])
 }
@@ -39,8 +42,8 @@ model movimentacao {
   unidadeId   Int
   entrada     DateTime @default(now())
   saida       DateTime?
-  unidade     unidade  @relation(fields: [unidadeId], references: [id])
-  visitante   visitante @relation(fields: [visitanteId], references: [id])
+  unidadeVisitada     unidade  @relation(fields: [unidadeId], references: [id])
+  visitante   visitante @relation(fields: [visitanteId], references: [id], onDelete: Cascade)
 
   @@index([unidadeId])
   @@index([visitanteId])

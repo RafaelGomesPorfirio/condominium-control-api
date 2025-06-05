@@ -1,55 +1,29 @@
 import { prisma } from '../services/prisma';
+import { VisitanteCreateInput, VisitanteUpdateInput } from '../types/visitante.type';
 
-export interface VisitanteData {
-  nome: string;
-  documento: string;
-  telefone?: string | null; 
-}
+export const createVisitante = async (data: VisitanteCreateInput) => {
+  return prisma.visitante.create({ data });
+};
 
-export async function createVisitante(data: VisitanteData) {
-  return prisma.visitante.create({
-    data: {
-      nome: data.nome,
-      documento: data.documento,
-      telefone: data.telefone,
-    }
-  });
-}
-
-export async function findAllVisitantes() {
+export const findAllVisitantes = async () => {
   return prisma.visitante.findMany();
-}
+};
 
-export async function findVisitanteById(id: string) {
+export const findVisitanteById = async (id: number) => {
   return prisma.visitante.findUnique({
-     where: { id: Number(id) },
+    where: { id },
   });
-}
+};
 
-export async function updateVisitante(id: string, data: VisitanteData) {
-  try {
-    return await prisma.visitante.update({
-      where: { id: Number(id) },
-      data: {
-        nome: data.nome,
-        documento: data.documento,
-        telefone: data.telefone,
-      }
-    });
-  } catch (error) {
-    console.error('Erro updateVisitante:', error);
-    return null;
-  }
-}
+export const updateVisitante = async (id: number, data: VisitanteUpdateInput) => {
+  return prisma.visitante.update({
+    where: { id },
+    data,
+  });
+};
 
-export async function deleteVisitante(id: string) {
-  try {
-    await prisma.visitante.delete({
-       where: { id: Number(id) },
-    });
-    return true;
-  } catch (error) {
-    console.error('Erro deleteVisitante:', error);
-    return false;
-  }
-}
+export const deleteVisitante = async (id: number) => {
+  return prisma.visitante.delete({
+    where: { id },
+  });
+};

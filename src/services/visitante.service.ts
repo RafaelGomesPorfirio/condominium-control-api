@@ -1,21 +1,22 @@
-import * as visitanteRepo from '../repositories/visitante.repository';
+import * as visitanteRepository from '../repositories/visitante.repository';
+import { VisitanteCreateInput, VisitanteUpdateInput } from '../types/visitante.type';
 
-export async function createVisitante(data: { nome: string; documento: string; telefone?: string }) {
-  return visitanteRepo.createVisitante(data);
-}
+export const createVisitante = async (data: VisitanteCreateInput) => {
+  return visitanteRepository.createVisitante(data);
+};
 
-export async function getAllVisitantes() {
-  return visitanteRepo.findAllVisitantes();
-}
+export const getAllVisitantes = async () => {
+  return visitanteRepository.findAllVisitantes();
+};
 
-export async function getVisitanteById(id: string) {
-  return visitanteRepo.findVisitanteById(id);
-}
+export const getVisitanteById = async (id: number) => {
+  return visitanteRepository.findVisitanteById(id);
+};
 
-export async function updateVisitante(id: string, data: { nome: string; documento: string; telefone?: string }) {
-  return visitanteRepo.updateVisitante(id, data);
-}
+export const updateVisitante = async (id: number, data: VisitanteUpdateInput) => {
+  return visitanteRepository.updateVisitante(id, data);
+};
 
-export async function deleteVisitante(id: string) {
-  return visitanteRepo.deleteVisitante(id);
-}
+export const deleteVisitante = async (id: number) => {
+  return visitanteRepository.deleteVisitante(id);
+};
