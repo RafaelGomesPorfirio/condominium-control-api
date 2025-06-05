@@ -52,7 +52,6 @@ API RESTful para gerenciamento de visitantes, unidades e condomínios com regist
 **Ferramentas:**
 - Swagger UI (documentação)
 - Jest (testes)
-- Docker (containerização)
 
 ## ⚙️ Configuração
 
